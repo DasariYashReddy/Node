@@ -60,16 +60,12 @@ app.post("/register", async (request, response) => {
 ///Login API
 app.post("/login", async (request, response) => {
   const { username, password } = request.body;
-  console.log(username, password);
-  const userPasword = await db.get(
-    `SELECT * FROM user WHERE username='${username}';`
-  );
-  console.log(userPasword.password);
+
   const userStatus = await db.get(
     `SELECT * FROM user WHERE username ='${username}'; `
   );
   if (userStatus !== undefined) {
-    if (await bcrypt.compare(password, userPasword.password)) {
+    if (await bcrypt.compare(password, userStatus.password)) {
       response.status(200);
       response.send("Login success!");
     } else {
@@ -107,4 +103,4 @@ app.put("/change-password", async (request, response) => {
   }
 });
 
-module.exports = express;
+module.exports = app;
